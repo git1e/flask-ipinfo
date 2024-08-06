@@ -104,7 +104,9 @@ def single_ip_info(ip_address):
     处理IP地址：先验证，后获取信息。
     """
     if not validate_ip_address(ip_address):
-        return jsonify({"error": "Invalid IP address: ip_address"})
+        data={"error": "Invalid IP address %s"%ip_address}
+        logger.error(data)
+        return jsonify(data)
 
     # 获取IP地址信息并返回
     data = get_ip_address_info(ip_address)

@@ -20,7 +20,7 @@ cp -av "$SOURCE_FILE" ../
 # 进入Python脚本路径并执行脚本
 echo "Generating database..."
 cd "$PYTHON_SCRIPT_PATH" || { echo "Error: Directory $PYTHON_SCRIPT_PATH does not exist."; exit 1; }
-python main.py gen --src="$DATA_FILE_PATH" --dst="$TARGET_FILE" || { echo "Error: Failed to generate the database using the Python script."; exit 1; }
+python3 main.py gen --src="$DATA_FILE_PATH" --dst="$TARGET_FILE" || { echo "Error: Failed to generate the database using the Python script."; exit 1; }
 
 # 检查目标文件是否存在
 if [ ! -f "$TARGET_FILE" ]; then
