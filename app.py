@@ -76,13 +76,13 @@ def get_ip_address_info(ip_address):
 def ip_info():
     logger.info('Received request at /')
     # 获取客户端 IP 地址,如果经过了代理服务器,client_ip则从x-forwarded-for头中获取
-    if request.headers.getlist("X-Forwarded-For"):
-        client_ip = request.headers.getlist("X-Forwarded-For")[0]
+    X_Forwarded_For=request.headers.get("X-Forwarded-For")
+    if X_Forwarded_For:
+        client_ip = X_Forwarded_For[0]
+        logger.info(f"get client ip:{client_ip} from X-Forwarded-For:{X_Forwarded_For}")
     else:
         client_ip = request.remote_addr
-
-    # 获取 User-Agent 信息
-    user_agent = request.user_agent.string
+        logger.info(f"get client ip:{client_ip} from remote_addr:{client_ip}")
 
     data=get_ip_address_info(client_ip)
     # 使用 jsonify 将字典转换为 JSON 响应
@@ -118,4 +118,4 @@ def single_ip_info(ip_address):
 
 # 主入口
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
