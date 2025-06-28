@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content">
+    <h1>IP 查询</h1>
+    <form id="ip-form">
+        <label for="ip">输入 IP 地址:</label>
+        <input type="text" id="ip" name="ip" placeholder="例如: 8.8.8.8" required>
+        <button type="submit">查询</button>
+    </form>
+    <div id="result">
+        {% if result %}
+            <p>IP: {{ result.IP }}</p>
+            <p>国家: {{ result.国家 }}</p>
+            <p>区域: {{ result.区域 }}</p>
+            <p>省份: {{ result.省份 }}</p>
+            <p>城市: {{ result.城市 }}</p>
+            <p>ISP: {{ result.ISP }}</p>
+        {% endif %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('#ip-form');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // 阻止表单的默认提交行为
+
+                const ipAddress = document.getElementById('ip').value;
+                fetch(`/ip`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `ip=${encodeURIComponent(ipAddress)}`
+                })
+                .then(response => response.text()) // 修改为解析为文本
+                .then(data => {
+                    const resultDiv = document.getElementById('result');
+                    if (data.includes('Error')) {
+                        // 提取错误信息
+                        const errorMatch = data.match(/<p>Error: (.*?)<\/p>/);
+                        if (errorMatch) {
+                            resultDiv.innerHTML = `<p>Error: ${errorMatch[1]}</p>`;
+                        } else {
+                            resultDiv.innerHTML = '<p>Error: Unable to fetch data</p>';
+                        }
+                    } else {
+                        // 提取结果信息
+                        const ipMatch = data.match(/<p>IP: (.*?)<\/p>/);
+                        const countryMatch = data.match(/<p>国家: (.*?)<\/p>/);
+                        const regionMatch = data.match(/<p>区域: (.*?)<\/p>/);
+                        const provinceMatch = data.match(/<p>省份: (.*?)<\/p>/);
+                        const cityMatch = data.match(/<p>城市: (.*?)<\/p>/);
+                        const ispMatch = data.match(/<p>ISP: (.*?)<\/p>/);
+
+                        if (ipMatch && countryMatch && regionMatch && provinceMatch && cityMatch && ispMatch) {
+                            resultDiv.innerHTML = `
+                                <p>IP: ${ipMatch[1]}</p>
+                                <p>国家: ${countryMatch[1]}</p>
+                                <p>区域: ${regionMatch[1]}</p>
+                                <p>省份: ${provinceMatch[1]}</p>
+                                <p>城市: ${cityMatch[1]}</p>
+                                <p>ISP: ${ispMatch[1]}</p>
+                            `;
+                        } else {
+                            resultDiv.innerHTML = '<p>Error: Unable to fetch data</p>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerHTML = '<p>Error: Unable to fetch data</p>';
+                });
+            });
+        });
+    </script>
+</div>
+{% endblock %}

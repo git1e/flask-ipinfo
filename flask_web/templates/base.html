@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运维管理平台</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">运维管理平台</div>
+        <div class="search-bar">
+            <form action="/" method="get">
+                <input type="text" id="ip" name="ip" placeholder="Search IP...">
+                <button type="submit">Lookup</button>
+            </form>
+        </div>
+        <div class="user-actions">
+            <a href="#" style="color: white;">登录</a>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h3>功能分类</h3>
+        <ul>
+            <li><a href="/">首页</a></li>
+            <li><a href="/ip">IP查询</a></li>
+            <li><a href="#">日志管理</a></li>
+            <li><a href="#">用户管理</a></li>
+            <!-- 其他功能链接 -->
+        </ul>
+    </div>
+    <div class="content">
+        {% block content %}
+        <!-- 内容将在这里插入 -->
+        {% endblock %}
+    </div>
+</body>
+</html>

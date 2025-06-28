@@ -1,5 +1,5 @@
-/ip2region.xdb
+/flask_web/ip2region.xdb
 /app.log
 .idea/
 __pycache__/
-xdbSearcher.py
+flask_web/xdbSearcher.py
